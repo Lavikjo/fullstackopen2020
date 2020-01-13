@@ -7,9 +7,10 @@ const Button = ({ onClick, text }) => (
   <button onClick={onClick}> {text} </button>
 )
 const Statistic = ({ text, value }) => (
-  <p>
-    {text} {value}
-  </p>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 )
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -20,14 +21,16 @@ const Statistics = ({ good, neutral, bad }) => {
 
   if (good !== 0 || neutral !== 0 || bad !== 0) {
     return (
-      <div>
-        <Statistic text="good" value={good} />
-        <Statistic text="neutral" value={neutral} />
-        <Statistic text="bad" value={bad} />
-        <Statistic text="all" value={count} />
-        <Statistic text="average" value={avg} />
-        <Statistic text="positive" value={positive + " %"} />
-      </div>
+      <table>
+        <tbody>
+          <Statistic text="good" value={good} />
+          <Statistic text="neutral" value={neutral} />
+          <Statistic text="bad" value={bad} />
+          <Statistic text="all" value={count} />
+          <Statistic text="average" value={avg} />
+          <Statistic text="positive" value={positive + " %"} />
+        </tbody>
+      </table>
     )
   }
   return <div>No feedback given</div>
