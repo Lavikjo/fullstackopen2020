@@ -8,11 +8,31 @@ const Button = ({ onClick, text }) => (
 )
 
 const Statistics = ({ good, neutral, bad }) => {
+  const count =  good  + neutral + bad 
+  const score = good + neutral  * 0 + bad * -1
+  const avg = score / 3
+  const positive = good  / count * 100
+
+  if (count !== 0 && avg !== 0 && positive !== 0) {
+    return (
+      <div>
+        <p>good {good}</p>
+        <p>neutral {neutral}</p>
+        <p>bad {bad}</p>
+        <p>all {count}</p>
+        <p>average {avg}</p>
+        <p>positive {positive} %</p>
+      </div>
+    )
+  }
   return (
     <div>
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>all 0</p>
+      <p>average 0</p>
+      <p>positive 0 %</p>
     </div>
   )
 }
