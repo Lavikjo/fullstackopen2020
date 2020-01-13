@@ -6,28 +6,31 @@ const Header = ({ text }) => <h1>{text}</h1>
 const Button = ({ onClick, text }) => (
   <button onClick={onClick}> {text} </button>
 )
+const Statistic = ({ text, value }) => (
+  <p>
+    {text} {value}
+  </p>
+)
 
 const Statistics = ({ good, neutral, bad }) => {
-  const count =  good  + neutral + bad 
-  const score = good + neutral  * 0 + bad * -1
+  const count = good + neutral + bad
+  const score = good + neutral * 0 + bad * -1
   const avg = score / 3
-  const positive = good  / count * 100
+  const positive = (good / count) * 100
 
   if (good !== 0 || neutral !== 0 || bad !== 0) {
     return (
       <div>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>all {count}</p>
-        <p>average {avg}</p>
-        <p>positive {positive} %</p>
+        <Statistic text="good" value={good} />
+        <Statistic text="neutral" value={neutral} />
+        <Statistic text="bad" value={bad} />
+        <Statistic text="all" value={count} />
+        <Statistic text="average" value={avg} />
+        <Statistic text="positive" value={positive + " %"} />
       </div>
     )
   }
-  return (
-    <div>No feedback given</div>
-  )
+  return <div>No feedback given</div>
 }
 
 const App = () => {
