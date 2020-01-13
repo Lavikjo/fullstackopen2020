@@ -1,0 +1,9 @@
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+note over palvelin:
+Lisätään uusi viesti palvelimelle
+end note
+palvelin->selain: json-vastaus {"message":"note created"}
+
+note over selain:
+päivitetään uusi viesti sivun html:llään
+end note
