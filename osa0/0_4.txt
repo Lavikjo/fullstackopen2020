@@ -1,0 +1,24 @@
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+note over palvelin:
+Lisätään uusi viesti palvelimelle
+end note
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+palvelin-->selain: main.js
+
+note over selain:
+suoritetaan js koodi ja noudetaan JSON-data palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin-->selain: json-data
+
+note over selain:
+Piirretään json-data selaimeen sivulle
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/favicon.ico
+palvelin->selain: 404 - Not found
