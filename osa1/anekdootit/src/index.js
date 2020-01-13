@@ -1,21 +1,53 @@
 import React, { useState } from "react"
 import ReactDOM from "react-dom"
 
-const Button = ({ onClick }) => (
+const Button = ({ onClick, text }) => (
+  <>
+    <button onClick={onClick}>{text}</button>
+  </>
+)
+const Votes = ({ votes }) => (
   <div>
-    <button onClick={onClick}>Next anecdote</button>
+    <p>has {votes} votes</p>
   </div>
 )
-
+const MostVotes = ({ anecdotes, votes }) => {
+  const maxIdx = votes.indexOf(Math.max(...votes))
+  return (
+    <div>
+      <p>{anecdotes[maxIdx]}</p>
+      <p>Has {votes[maxIdx]} votes</p>
+    </div>
+  )
+}
+const Header = ({ text }) => <h1>{text}</h1>
 const App = props => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(
+    Array.apply(null, Array(props.anecdotes.length)).map(
+      Number.prototype.valueOf,
+      0
+    )
+  )
   const setAnecdote = () => () =>
     setSelected(Math.floor(Math.random() * props.anecdotes.length))
+
+  const incrementVote = () => () => {
+    const temp = [...votes]
+    temp[selected] += 1
+    return setVotes(temp)
+  }
   return (
     <>
+      <Header text="Anecdote of the day" />
       <div>{props.anecdotes[selected]}</div>
-
-      <Button onClick={setAnecdote()}/>
+      <Votes votes={votes[selected]} />
+      <div>
+        <Button onClick={incrementVote()} text="vote" />
+        <Button onClick={setAnecdote()} text="next anecdote" />
+      </div>
+      <Header text="Anecdote with most votes" />
+      <MostVotes anecdotes={props.anecdotes} votes={votes} />
     </>
   )
 }
