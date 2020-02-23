@@ -5,11 +5,8 @@ const Courses = props => {
   console.log(props)
   return (
     <div>
-      {props.courses.map(value => {
-      return ( 
-        <Course course={value} key={value.name}/>
-        
-  )})}
+      {() => props.courses.map(value => 
+        <Course course={value} key={value.name}/>)}
     </div>
   )
 }
