@@ -5,7 +5,7 @@ import axios from "axios"
 
 function App() {
   const [newFilter, setNewFilter] = useState("")
-  const [countries, setCountries] = useState({})
+  const [countries, setCountries] = useState([])
 
   useEffect(() => {
     axios
