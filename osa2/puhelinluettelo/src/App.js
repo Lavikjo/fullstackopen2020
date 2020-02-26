@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
 import Persons from "./components/Persons"
 import Filter from "./components/Filter"
-import axios from "axios"
+import personService from "./services/personservice"
+import personservice from "./services/personservice"
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,13 +11,10 @@ const App = () => {
   const [newFilter, setNewFilter] = useState("")
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then(response => {
-      setPersons(response.data)
-    })
+    personService.getAll().then(response => setPersons(response))
   }, [])
 
   const addName = event => {
-    console.log(newName)
     event.preventDefault()
     const nameObject = {
       name: newName,
@@ -31,11 +29,30 @@ const App = () => {
           element.number === nameObject.number
       )
     ) {
-      setPersons(persons.concat(nameObject))
+      
+      personService
+        .create(nameObject)
+        .then(response => setPersons(persons.concat(response)))
       setNewName("")
       setNewNumber("")
     } else {
-      window.alert(nameObject.name + " is already added to phonebook!")
+      if (
+        window.confirm(
+          nameObject.name +
+            " is already added to phonebook, replace the old number with a new one?"
+        )
+      ) {
+        const oldPerson = persons.filter(person => person.name === nameObject.name)
+        personservice
+          .update(oldPerson[0].id, nameObject)
+          .then(response =>
+            setPersons(
+              persons.map(person =>
+                person.id === response.id ? response : person
+              )
+            )
+          )
+      }
       setNewName("")
       setNewNumber("")
     }
@@ -51,7 +68,10 @@ const App = () => {
   const handleFilterChange = event => {
     setNewFilter(event.target.value)
   }
-
+  const handleDelete = id => {
+    setPersons(persons.filter(person => person.id !== id))
+    personService.remove(id)
+  }
   return (
     <div>
       <h2>Phonebook</h2>
@@ -73,7 +93,11 @@ const App = () => {
         </div>
       </form>
       <h3>Numbers</h3>
-      <Persons persons={persons} />
+      {Array.isArray(persons) && persons.length === 0 ? (
+        <div>No persons stored</div>
+      ) : (
+        <Persons persons={persons} onHandleDelete={handleDelete} />
+      )}
     </div>
   )
 }
