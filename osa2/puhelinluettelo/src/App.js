@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react"
 import Persons from "./components/Persons"
 import Filter from "./components/Filter"
 import personService from "./services/personservice"
-import personservice from "./services/personservice"
+import Notification from "./components/Notification"
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [newFilter, setNewFilter] = useState("")
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(response => setPersons(response))
@@ -29,10 +30,13 @@ const App = () => {
           element.number === nameObject.number
       )
     ) {
-      
-      personService
-        .create(nameObject)
-        .then(response => setPersons(persons.concat(response)))
+      personService.create(nameObject).then(response => {
+        setPersons(persons.concat(response))
+        setNotification({ data: response, type: "info", from: "create" })
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
+      })
       setNewName("")
       setNewNumber("")
     } else {
@@ -42,16 +46,32 @@ const App = () => {
             " is already added to phonebook, replace the old number with a new one?"
         )
       ) {
-        const oldPerson = persons.filter(person => person.name === nameObject.name)
-        personservice
+        const oldPerson = persons.filter(
+          person => person.name === nameObject.name
+        )
+        personService
           .update(oldPerson[0].id, nameObject)
-          .then(response =>
+          .then(response => {
             setPersons(
               persons.map(person =>
                 person.id === response.id ? response : person
               )
             )
-          )
+            setNotification({ data: response, type: "info", from: "update" })
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+          })
+          .catch(error => {
+            setNotification({
+              data: oldPerson[0],
+              type: "error",
+              from: "update"
+            })
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+          })
       }
       setNewName("")
       setNewNumber("")
@@ -68,13 +88,28 @@ const App = () => {
   const handleFilterChange = event => {
     setNewFilter(event.target.value)
   }
-  const handleDelete = id => {
-    setPersons(persons.filter(person => person.id !== id))
-    personService.remove(id)
+  const handleDelete = personToBeDeleted => {
+    setPersons(persons.filter(person => person.id !== personToBeDeleted.id))
+    personService
+      .remove(personToBeDeleted.id)
+      .then(response =>
+        setNotification({ data: personToBeDeleted, type: "info", from: "delete" })
+      )
+      .catch(error => {
+        setNotification({
+          data: personToBeDeleted,
+          type: "error",
+          from: "delete"
+        })
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
+      })
   }
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       <div>
         Filter by name:{" "}
         <input value={newFilter} onChange={handleFilterChange} />

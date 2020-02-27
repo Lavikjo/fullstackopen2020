@@ -12,7 +12,7 @@ const Persons = ({ persons, onHandleDelete }) => {
             name={person.name}
             number={person.number}
             key={person.name}
-            onHandleDelete={() => onHandleDelete(person.id)}
+            onHandleDelete={() => onHandleDelete(person)}
           />
         ))}
       </ul>
