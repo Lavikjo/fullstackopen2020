@@ -4,9 +4,13 @@ const cors = require("cors")
 const app = express()
 const bodyParser = require("body-parser")
 
-app.use(morgan('tiny'))
-app.use(bodyParser.json())
+morgan.token('body', function getBody (req) {
+  return JSON.stringify(req.body)
+})
 
+
+app.use(bodyParser.json())
+app.use(morgan(':method :url :status :response-time ms :body'))
 app.use(cors())
 
 let persons = []
@@ -69,7 +73,6 @@ app.post("/api/persons", (request, response) => {
 
   // Check if name already exists
   const oldPerson = persons.filter((person) => person.name == body.name)
-  console.log(oldPerson)
   if(oldPerson.length > 0) {
     return response.status(400).json({
       error: "Person already exist!"
@@ -80,7 +83,6 @@ app.post("/api/persons", (request, response) => {
     number: body.number,
     id: generateId(),
   }
-
   persons = persons.concat(person)
 
   response.json(person)
