@@ -61,10 +61,18 @@ app.post("/api/persons", (request, response) => {
   console.log(body)
   if (!body.name && !body.number) {
     return response.status(400).json({
-      error: "content missing",
+      error: "Content (name, phonenumber) missing",
     })
   }
 
+  // Check if name already exists
+  const oldPerson = persons.filter((person) => person.name == body.name)
+  console.log(oldPerson)
+  if(oldPerson.length > 0) {
+    return response.status(400).json({
+      error: "Person already exist!"
+    })
+  }
   const person = {
     name: body.name,
     number: body.number,
