@@ -1,0 +1,25 @@
+version: '3'
+
+networks:
+   web:
+    external: true
+
+services:
+    phonebook:
+        image: phonebook
+        restart: always
+        container_name: phonebook
+        user: "node"
+        networks: 
+            - web
+        labels:
+            - "traefik.enable=true"
+            - "traefik.web.port=3001"
+            - "traefik.docker.network=web"
+            - "traefik.web.frontend.entryPoints= http, https"
+            - "traefik.web.frontend.headers.forceSTSHeader=true"
+            - "traefik.web.frontend.headers.referrerPolicy=no-referrer"
+            - "traefik.web.frontend.headers.SSLRedirect=true"
+            - "traefik.web.frontend.headers.STSPreload=true"
+            - "traefik.web.frontend.headers.STSSeconds=15552000"
+            - "traefik.web.frontend.rule=Host:phonebook.lavikjo.com"
