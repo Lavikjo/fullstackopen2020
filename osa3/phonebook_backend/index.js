@@ -1,21 +1,20 @@
+require("dotenv").config()
 const express = require("express")
-const morgan = require('morgan')
+const morgan = require("morgan")
 const cors = require("cors")
+const Person = require("./models/person")
 
 const app = express()
 const bodyParser = require("body-parser")
 
-morgan.token('body', function getBody (req) {
+morgan.token("body", function getBody(req) {
   return JSON.stringify(req.body)
 })
 
-
-app.use(express.static('build'))
+app.use(express.static("build"))
 app.use(bodyParser.json())
-app.use(morgan(':method :url :status :response-time ms :body'))
+app.use(morgan(":method :url :status :response-time ms :body"))
 app.use(cors())
-
-let persons = []
 
 const generateId = () => {
   /*const maxId = persons.length > 0
@@ -33,40 +32,41 @@ const generateId = () => {
 }
 
 app.get("/info", (request, response) => {
-  const len = persons.length
-  const time = new Date()
-  response.send(`<div>Phonebook has info for ${len} persons</div>
+  Person.find({}).then((persons) => {
+    const time = new Date()
+    response.send(`<div>Phonebook has info for ${persons.length} persons</div>
     <div>${time}</div>`)
+  })
+  
 })
 
 app.get("/api/persons", (request, response) => {
-  response.json(persons)
+  Person.find({}).then((persons) => {
+    response.json(persons.map((person) => person.toJSON()))
+  })
 })
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.filter((person) => person.id === id)
-
-  if (person === null) return response.status(404).end()
-  else response.json(person)
+  Person.findById(request.params.id)
+    .then((person) => {
+      response.json(person.toJSON())
+    })
+    .catch(function (error) {
+      return response.status(404).end()
+    })
 })
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id)
-  console.log(id)
-  const newPersons = persons.filter((person) => person.id !== id)
-  console.log(newPersons)
-  console.log(persons)
-  console.log(newPersons === persons)
-  if (newPersons === persons)
-    //Nothing was deleted, return 404
-    return response.status(404).end()
-  else return response.status(204).end()
+  Person.findByIdAndRemove(request.params.id, request.body, function(err, data) {
+    if(err)
+      return response.status(404).end()
+    else
+      return response.status(204).end()
+  })
 })
 
 app.post("/api/persons", (request, response) => {
   const body = request.body
-  console.log(body)
   if (!body.name && !body.number) {
     return response.status(400).json({
       error: "Content (name, phonenumber) missing",
@@ -74,20 +74,21 @@ app.post("/api/persons", (request, response) => {
   }
 
   // Check if name already exists
+  /*
   const oldPerson = persons.filter((person) => person.name == body.name)
-  if(oldPerson.length > 0) {
+  if (oldPerson.length > 0) {
     return response.status(400).json({
-      error: "Person already exist!"
+      error: "Person already exist!",
     })
   }
-  const person = {
+  */
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: generateId(),
-  }
-  persons = persons.concat(person)
-
-  response.json(person)
+  })
+  person.save().then((savedPerson) => {
+    response.json(savedPerson.toJSON())
+  })
 })
 
 const PORT = process.env.PORT || 3001
