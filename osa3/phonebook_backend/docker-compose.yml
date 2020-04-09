@@ -10,6 +10,7 @@ services:
         restart: always
         container_name: phonebook
         user: "node"
+        env_file: .env
         networks: 
             - web
         labels:
