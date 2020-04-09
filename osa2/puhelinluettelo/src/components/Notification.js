@@ -27,7 +27,7 @@ const Notification = ({ notification }) => {
         case 'error':
             switch (notification.from) {
                 case 'create':
-                    message = "Unable to create " + notification.data.name;
+                    message = notification.data;
                     break;
                 case 'update':
                     message = "Unable to update " + notification.data.name;
