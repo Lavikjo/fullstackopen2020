@@ -11,14 +11,51 @@ const totalLikes = (blogs) => {
 }
 
 const favoriteBlog = (blogs) => {
-  return blogs.length === 0 ? null :
-    blogs.reduce((current, next) =>
+  return blogs.length === 0
+    ? null
+    : blogs.reduce((current, next) =>
       next.likes > current.likes ? next : current
     )
+}
+
+const mostBlogs = (blogs) => {
+  return blogs.length === 0
+    ? null
+    : Object.entries(blogs
+      .reduce((sum, item) => {
+        const key = item.author
+        const currentSum = sum[key] || 0
+        sum[key] = currentSum + 1
+        return sum
+      }, {}))
+      .map(([key, value]) => {
+        return { author: key, blogs: value }
+      })
+      .reduce((current, next) =>
+        next.blogs > next.blogs ? next : current)
+}
+
+const mostLikes = (blogs) => {
+  return blogs.length === 0
+    ? null
+    : Object.entries(blogs
+      .reduce((sum, item) => {
+        const key = item.author
+        const currentSum = sum[key] || 0
+        sum[key] = currentSum + item.likes
+        return sum
+      }, {}))
+      .map(([key, value]) => {
+        return { author: key, likes: value }
+      })
+      .reduce((current, next) =>
+        next.likes > next.likes ? next : current)
 }
 
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs,
+  mostLikes
 }
