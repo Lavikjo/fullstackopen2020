@@ -60,21 +60,26 @@ app.post("/api/persons", (request, response, next) => {
   }
 
   // Check if name already exists
-  /*
-  const oldPerson = persons.filter((person) => person.name == body.name)
-  if (oldPerson.length > 0) {
-    return response.status(400).json({
-      error: "Person already exist!",
-    })
-  }
-  */
-  const person = new Person({
-    name: body.name,
-    number: body.number,
+  Person.findOne({"name": body.name})
+  .then(result => {
+    if(result) {
+      return response.status(400).json({
+        error: `Person ${result.name} already exist!`,
+        id: result.id
+      })
+    } else {
+      // Else create new person
+      const person = new Person({
+        name: body.name,
+        number: body.number,
+      })
+      person.save().then((savedPerson) => {
+        return response.json(savedPerson.toJSON())
+      })
+    }
   })
-  person.save().then((savedPerson) => {
-    response.json(savedPerson.toJSON())
-  })
+
+  
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
