@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use(morgan(":method :url :status :response-time ms :body"))
 app.use(cors())
 
-app.get("/info", (request, response, next) => {
+app.get("/info", (request, response) => {
   Person.find({}).then((persons) => {
     const time = new Date()
     response.send(`<div>Phonebook has info for ${persons.length} persons</div>
@@ -24,7 +24,7 @@ app.get("/info", (request, response, next) => {
   })
 })
 
-app.get("/api/persons", (request, response, next) => {
+app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
     response.json(persons.map((person) => person.toJSON()))
   })
@@ -40,7 +40,7 @@ app.get("/api/persons/:id", (request, response, next) => {
 
 app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end()
     })
     .catch((error) => next(error))
