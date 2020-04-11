@@ -102,6 +102,16 @@ describe("Blog backend", () => {
       .send(newBlog)
       .expect(400)
   })
+
+  test("missing token returns 401", async () => {
+    const newBlog = {
+      author: "testi",
+      title: "kirioitus",
+      likes: 2,
+      url: "www.test.com",
+    }
+    await api.post("/api/blogs").send(newBlog).expect(401)
+  })
 })
 
 afterAll(() => {
