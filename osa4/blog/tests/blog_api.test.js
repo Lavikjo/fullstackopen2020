@@ -41,6 +41,11 @@ describe("Blog backend", () => {
     const newBlogs = await helper.blogsInDb()
     expect(newBlogs[2].likes).toBe(0)
   })
+
+  test("missing title and url returns 400", async () => {
+    const newBlog = { author: "testi", likes: 3}
+    await api.post("/api/blogs").send(newBlog).expect(400)
+  })
 })
 
 afterAll(() => {
