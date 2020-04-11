@@ -43,7 +43,7 @@ describe("Blog backend", () => {
   })
 
   test("missing title and url returns 400", async () => {
-    const newBlog = { author: "testi", likes: 3}
+    const newBlog = { author: "testi", likes: 3 }
     await api.post("/api/blogs").send(newBlog).expect(400)
   })
 })
