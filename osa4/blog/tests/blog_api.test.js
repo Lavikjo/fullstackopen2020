@@ -21,6 +21,26 @@ describe("Blog backend", () => {
 
     expect(response.body).toHaveLength(helper.initialBlogs.length)
   })
+
+  test("unique identifier is id", async () => {
+    const response = await api.get("/api/blogs")
+    expect(response.body[0].id).toBeDefined()
+  })
+
+  test("add new blog", async () => {
+    const newBlog = { author: "testi", title: "kirioitus", likes: 2, url: "www.test.com" }
+    await api.post("/api/blogs").send(newBlog).expect(200)
+    const newBlogs = await helper.blogsInDb()
+    expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
+    expect(newBlogs[2].author).toBe("testi")
+  })
+
+  test("missing likes property equals to zero", async () => {
+    const newBlog = { author: "testi", title: "kirioitus", url: "www.test.com" }
+    await api.post("/api/blogs").send(newBlog).expect(200)
+    const newBlogs = await helper.blogsInDb()
+    expect(newBlogs[2].likes).toBe(0)
+  })
 })
 
 afterAll(() => {

@@ -14,8 +14,6 @@ const initialBlogs = [
     title: "kiroitus",
     likes: 6,
     url: "http://kiroitus.com",
-    _id: "5a422aa71b54a676234d17f2",
-    __v: 0,
   },
 ]
 
@@ -25,8 +23,6 @@ const nonExistingId = async () => {
     title: "kirjoitus",
     likes: 3,
     url: "http://kirjoitus.com",
-    _id: "5a422aa71b54a676234d17f8",
-    __v: 0,
   })
   await blog.save()
   await blog.remove()
