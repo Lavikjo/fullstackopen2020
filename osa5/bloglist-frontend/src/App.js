@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Blogs from "./components/Blogs"
+import BlogForm from "./components/BlogForm"
 import LoggedUser from "./components/LoggedUser"
 import LoginForm from "./components/LoginForm"
 import Notification from "./components/Notification"
@@ -11,17 +12,20 @@ const App = () => {
   const [notification, setNotification] = useState(null)
 
   useEffect(() => {
-    const loggedUser = window.localStorage.getItem("loggedBlogappUser")
-    if (loggedUser) {
-      const user = JSON.parse(loggedUser)
-      blogService.setToken(user.token)
-      setUser(user)
-    }
     async function fetchBlogs() {
       const blogs = await blogService.getAll()
       setBlogs(blogs)
     }
     fetchBlogs()
+  }, [])
+
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem("loggedBlogappUser")
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser)
+      blogService.setJWT(user.token)
+      setUser(user)
+    }
   }, [])
 
   return (
@@ -36,6 +40,11 @@ const App = () => {
         <div>
           <h1>Blogs</h1>
           <LoggedUser user={user} callback={() => setUser(null)} />
+          <BlogForm
+            blogs={blogs}
+            setNotification={(data) => setNotification(data)}
+            setBlogs={(data) => setBlogs(data)}
+          />
           <Blogs blogs={blogs} />
         </div>
       )}

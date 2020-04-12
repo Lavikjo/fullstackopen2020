@@ -7,7 +7,7 @@ const Notification = ({ notification }) => {
     case "info":
       switch (notification.from) {
         case "create":
-          message = "Added " + notification.data.name
+          message = `A new blog ${notification.data.title} by ${notification.data.author} added`
           break
         case "update":
           message = "Updated " + notification.data.name

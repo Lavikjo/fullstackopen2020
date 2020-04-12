@@ -8,8 +8,8 @@ const getAll = async () => {
   return response.data
 }
 
-const setToken = (token) => {
-  token = `bearer ${token}`
+const setJWT = (newToken) => {
+  token = `bearer ${newToken}`
 }
 
 const create = async (newBlog) => {
@@ -28,4 +28,4 @@ const update = async (id, newBlog) => {
   return response.data
 }
 
-export default { getAll, setToken, create, update }
+export default { getAll, setJWT, create, update }

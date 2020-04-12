@@ -8,7 +8,7 @@ const LoggedUser = ({ user, callback }) => {
       <button
         onClick={() => {
           callback()
-          blogService.setToken(null)
+          blogService.setJWT(null)
           window.localStorage.removeItem("loggedBlogappUser")
         }}>
         logout

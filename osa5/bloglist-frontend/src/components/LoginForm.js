@@ -13,11 +13,12 @@ const LoginForm = ({ setUser, setNotification }) => {
         username,
         password,
       })
-      setUser(user)
-      blogService.setToken(user.token)
+
+      blogService.setJWT(user.token)
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
       setUsername("")
       setPassword("")
+      setUser(user)
     } catch (exception) {
       setNotification({
         data: exception.response.data.error,
