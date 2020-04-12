@@ -26,20 +26,38 @@ const Blog = ({ blog, update }) => {
           {visible ? (
             <button
               onClick={async () => {
-                const newBlog = await blogService.update(blog.id, {
+                await blogService.update(blog.id, {
                   title: blog.title,
                   likes: blog.likes + 1,
                   author: blog.author,
                   url: blog.url,
                   user: blog.user.id,
                 })
-                update(newBlog)
+                update()
               }}>
               Like
             </button>
           ) : null}
         </div>
         <div>{visible ? blog.user.name : null}</div>
+        <div>
+          {visible &&
+          blog.user.username ===
+            JSON.parse(window.localStorage.getItem("loggedBlogappUser"))
+              .username ? (
+            <button
+              onClick={async () => {
+                if (
+                  window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
+                ) {
+                  await blogService.remove(blog.id)
+                  update()
+                }
+              }}>
+              Delete
+            </button>
+          ) : null}
+        </div>
       </div>
     </>
   )

@@ -17,19 +17,23 @@ const App = () => {
     setVisible(!visible)
   }
 
-  const handleUpdate = (blog) => {
+  async function fetchBlogs() {
+    const blogs = await blogService.getAll()
+    setBlogs(blogs)
+  }
+
+  const handleUpdate = () => {
+    /*
     //NOTE: make copy of array without reference to trigger re-rendering
     const newBlogs = blogs.map((blog) => ({ ...blog }))
     const blogIdx = newBlogs.findIndex((obj) => obj.id === blog.id)
     newBlogs[blogIdx].likes = blog.likes
     setBlogs(newBlogs)
+    */
+    fetchBlogs()
   }
 
   useEffect(() => {
-    async function fetchBlogs() {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
     fetchBlogs()
   }, [])
 
