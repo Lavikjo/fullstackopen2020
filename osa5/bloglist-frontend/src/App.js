@@ -63,10 +63,9 @@ const App = () => {
             toggleVisibility={() => toggleVisibility()}
             buttonLabel="New blog">
             <BlogForm
-              blogs={blogs}
               setNotification={(data) => setNotification(data)}
-              setBlogs={(data) => setBlogs(data)}
               onSubmit={() => toggleVisibility()}
+              update={handleUpdate}
             />
           </Togglable>
           <Blogs
