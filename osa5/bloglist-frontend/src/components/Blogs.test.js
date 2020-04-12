@@ -11,7 +11,6 @@ test("renders content", () => {
     user: "testuser",
     url: "www.test.com",
     likes: 3
-
   }
 
   const component = render(
@@ -26,22 +25,31 @@ test("renders content", () => {
   expect(component.container).not.toHaveTextContent(blog.url)
   expect(component.container).not.toHaveTextContent(3)
 })
-/*
-test("clicking the button calls event handler once", async () => {
-  const note = {
-    content: "Component testing is done with react-testing-library",
-    important: true
+
+test("clicking show button expands blog details", async () => {
+  const blog = {
+    author: "tester",
+    title: "testtitle ",
+    user: { username:"testuser",
+      id: "5e9260a1a421553c649c7f73",
+      name: "testname"
+    },
+    url: "www.test.com",
+    likes: 3
   }
 
-  const mockHandler = jest.fn()
+  // This needs to be added because of the check in component
+  window.localStorage.setItem("loggedBlogappUser", JSON.stringify(blog.user))
 
-  const { getByText } = render(
-    <Note note={note} toggleImportance={mockHandler} />
+  const { container, getByText } = render(
+    <Blog blog={blog}/>
   )
 
-  const button = getByText("make not important")
+  const button = getByText("view")
   fireEvent.click(button)
-
-  expect(mockHandler.mock.calls.length).toBe(1)
-
-})*/
+  expect(container).toHaveTextContent(blog.user.name)
+  expect(container).toHaveTextContent(blog.url)
+  expect(container).toHaveTextContent(3)
+  expect(container).toHaveTextContent("hide")
+  expect(container).toHaveTextContent("Delete")
+})
