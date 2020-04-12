@@ -26,6 +26,9 @@ const BlogForm = ({ setNotification, onSubmit, update }) => {
         type: "info",
         from: "create",
       })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } catch (exception) {
       setNotification({
         data: exception.response.data.error,
