@@ -65,7 +65,10 @@ const App = () => {
               onSubmit={() => toggleVisibility()}
             />
           </Togglable>
-          <Blogs blogs={blogs} update={handleUpdate} />
+          <Blogs
+            blogs={blogs.sort((a, b) => b.likes - a.likes)}
+            update={handleUpdate}
+          />
         </div>
       )}
     </div>
