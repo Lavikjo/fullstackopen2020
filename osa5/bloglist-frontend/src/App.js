@@ -17,6 +17,14 @@ const App = () => {
     setVisible(!visible)
   }
 
+  const handleUpdate = (blog) => {
+    //NOTE: make copy of array without reference to trigger re-rendering
+    const newBlogs = blogs.map((blog) => ({ ...blog }))
+    const blogIdx = newBlogs.findIndex((obj) => obj.id === blog.id)
+    newBlogs[blogIdx].likes = blog.likes
+    setBlogs(newBlogs)
+  }
+
   useEffect(() => {
     async function fetchBlogs() {
       const blogs = await blogService.getAll()
@@ -57,7 +65,7 @@ const App = () => {
               onSubmit={() => toggleVisibility()}
             />
           </Togglable>
-          <Blogs blogs={blogs} />
+          <Blogs blogs={blogs} update={handleUpdate} />
         </div>
       )}
     </div>
