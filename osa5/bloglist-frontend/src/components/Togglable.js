@@ -1,9 +1,9 @@
 import React from "react"
+import PropTypes from "prop-types"
 
 const Togglable = (props) => {
   const hideWhenVisible = { display: props.visible ? "none" : "" }
   const showWhenVisible = { display: props.visible ? "" : "none" }
-
   return (
     <div>
       <div style={hideWhenVisible}>
@@ -15,6 +15,9 @@ const Togglable = (props) => {
       </div>
     </div>
   )
+}
+Togglable.PropTypes = {
+  buttonLabel: PropTypes.string.isRequired,
 }
 
 export default Togglable

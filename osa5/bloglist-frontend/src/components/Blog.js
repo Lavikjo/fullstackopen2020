@@ -45,18 +45,18 @@ const Blog = ({ blog, update }) => {
           blog.user.username ===
             JSON.parse(window.localStorage.getItem("loggedBlogappUser"))
               .username ? (
-            <button
-              onClick={async () => {
-                if (
-                  window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
-                ) {
-                  await blogService.remove(blog.id)
-                  update()
-                }
-              }}>
+              <button
+                onClick={async () => {
+                  if (
+                    window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
+                  ) {
+                    await blogService.remove(blog.id)
+                    update()
+                  }
+                }}>
               Delete
-            </button>
-          ) : null}
+              </button>
+            ) : null}
         </div>
       </div>
     </>
