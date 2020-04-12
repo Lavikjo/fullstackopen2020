@@ -3,6 +3,7 @@ import Blogs from "./components/Blogs"
 import BlogForm from "./components/BlogForm"
 import LoggedUser from "./components/LoggedUser"
 import LoginForm from "./components/LoginForm"
+import Togglable from "./components/Togglable"
 import Notification from "./components/Notification"
 import blogService from "./services/blogs"
 
@@ -10,6 +11,11 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
+  const [visible, setVisible] = useState(false)
+
+  const toggleVisibility = () => {
+    setVisible(!visible)
+  }
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -40,11 +46,17 @@ const App = () => {
         <div>
           <h1>Blogs</h1>
           <LoggedUser user={user} callback={() => setUser(null)} />
-          <BlogForm
-            blogs={blogs}
-            setNotification={(data) => setNotification(data)}
-            setBlogs={(data) => setBlogs(data)}
-          />
+          <Togglable
+            visible={visible}
+            toggleVisibility={() => toggleVisibility()}
+            buttonLabel="New blog">
+            <BlogForm
+              blogs={blogs}
+              setNotification={(data) => setNotification(data)}
+              setBlogs={(data) => setBlogs(data)}
+              onSubmit={() => toggleVisibility()}
+            />
+          </Togglable>
           <Blogs blogs={blogs} />
         </div>
       )}
