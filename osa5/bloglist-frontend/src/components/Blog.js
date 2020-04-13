@@ -24,7 +24,7 @@ const Blog = ({ blog, update }) => {
         <div>
           {visible ? blog.likes : null}
           {visible ? (
-            <button
+            <button className="likeButton"
               onClick={async () => {
                 await blogService.update(blog.id, {
                   title: blog.title,

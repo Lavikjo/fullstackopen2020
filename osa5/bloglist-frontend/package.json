@@ -13,7 +13,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test -env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "tester": "cross-env CI=true npm test"
@@ -34,9 +34,13 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.2.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "cross-env": "^7.0.2",
-    "eslint-plugin-jest": "^23.8.2"
+    "eslint-plugin-jest": "^23.8.2",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "mutation-observer": "^1.0.3",
+    "nock": "^12.0.3"
   }
 }
