@@ -74,7 +74,7 @@ test("clicking like button twice", async () => {
     likes: 3,
     id: "5e9260a1a421553c649c7f73"
   }
-  //const fn = () => Promise.resolve("jotain")
+
   const mockHandler = jest.fn(() => Promise.resolve("jotain"))
   // This needs to be added because of the check in component
   window.localStorage.setItem("loggedBlogappUser", JSON.stringify(blog.user))
@@ -82,8 +82,6 @@ test("clicking like button twice", async () => {
   const { getByText } = render(
     <Blog blog={blog} update={mockHandler}/>
   )
-  //const spy = jest.spyOn(this, "fn")
-  //jest.useFakeTimers()
   const button = getByText("view")
   fireEvent.click(button)
   const likeButton = getByText("Like")
