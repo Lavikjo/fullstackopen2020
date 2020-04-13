@@ -16,7 +16,7 @@ const Togglable = (props) => {
     </div>
   )
 }
-Togglable.PropTypes = {
+Togglable.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
 }
 
