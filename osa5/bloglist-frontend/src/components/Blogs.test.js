@@ -7,6 +7,7 @@ import nock from "nock"
 import axios from "axios"
 import httpAdapter from "axios/lib/adapters/http"
 import MutationObserver from "mutation-observer"
+// eslint-disable-next-line no-undef
 global.MutationObserver = MutationObserver
 
 
