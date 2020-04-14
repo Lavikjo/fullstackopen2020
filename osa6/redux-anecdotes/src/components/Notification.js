@@ -15,7 +15,7 @@ const Notification = () => {
       dispatch(removeNotification())
     }, 5000)
     return () => clearTimeout(timerId)
-  }, [notification])
+  }, [notification, dispatch])
 
   if( notification ) {
     return (
