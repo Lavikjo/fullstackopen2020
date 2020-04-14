@@ -1,7 +1,19 @@
-export const setNotification = (notification) => {
-  return {
-    type: "SET_NOTIFICATION",
-    notification
+let token = null
+export const setNotification = (notification, timeout) => {
+
+  return async dispatch => {
+    // Check if previous notification timer exist and cancel it
+    if(token !== null) clearTimeout(token)
+    token = null
+    token = setTimeout(() => {
+      dispatch({
+        type: "REMOVE_NOTIFICATION"
+      })
+    }, timeout*1e3)
+    dispatch({
+      type: "SET_NOTIFICATION",
+      notification
+    })
   }
 }
 
