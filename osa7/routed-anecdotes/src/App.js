@@ -68,7 +68,6 @@ const Notification = ({notification}) => (
 )
 
 const CreateNew = (props) => {
-  const history = useHistory()
   const content = useField("text")
   const author = useField("text")
   const info = useField("text")
@@ -82,7 +81,21 @@ const CreateNew = (props) => {
       info: info.value,
       votes: 0
     })
-    history.push("/")
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
+  const omit = (obj, ...keysToOmit) => {
+    const copy = {...obj}
+    for (const key of keysToOmit) {
+      delete copy[key];
+    }
+    return copy
   }
 
   return (
@@ -91,17 +104,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...omit(content, "reset")} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...omit(author, "reset")} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...omit(info, "reset")} />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
@@ -109,6 +123,7 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
+  const history = useHistory()
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -132,6 +147,7 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    history.push("/")
     setNotification(`Created anecdote ${anecdote.content}!`)
     setTimeout(() => {
       setNotification("")
@@ -156,7 +172,6 @@ const App = () => {
   const anecdote = match 
       ? anecdotes.find(n => Number(n.id) === Number(match.params.id))
       : null
-
   return (
     <>
       <h1>Software anecdotes</h1>
