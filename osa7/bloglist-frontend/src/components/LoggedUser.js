@@ -1,5 +1,6 @@
 import React from "react"
-import { removeToken, removeUser } from "../reducers/loginReducer"
+import { removeUser } from "../reducers/loginReducer"
+import blogService from "../services/blogs"
 import { useDispatch } from "react-redux"
 
 const LoggedUser = ({ user }) => {
@@ -9,7 +10,7 @@ const LoggedUser = ({ user }) => {
       {user.name} logged in{" "}
       <button
         onClick={() => {
-          dispatch(removeToken())
+          blogService.setJWT(null)
           dispatch(removeUser())
           window.localStorage.removeItem("loggedBlogappUser")
         }}>

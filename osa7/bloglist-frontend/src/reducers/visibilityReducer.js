@@ -1,3 +1,5 @@
+import { combineReducers } from "redux"
+
 export const toggleVisibility = () => {
   return async dispatch => {
     dispatch({
@@ -15,16 +17,25 @@ export const toggleBlogVisibility = (id) => {
   }
 }
 
-
-const visibilityReducer = (state = [], action) => {
+const toggleable = (state = false, action) => {
   switch(action.type) {
   case "TOGGLE_VISIBILITY":
-    return !state.toggleable
-  case "TOGGLE_BLOG_VISIBILITY":
-    return !state.blogs[action.data.id]
+    return !state
   default:
     return state
   }
 }
+
+
+const blogs = (state = {}, action) => {
+  switch(action.type) {
+  case "TOGGLE_BLOG_VISIBILITY":
+    return { ...state, [action.data.id] : !state[action.data.id] }
+  default:
+    return state
+  }
+}
+
+const visibilityReducer = combineReducers({ toggleable, blogs })
 
 export default visibilityReducer

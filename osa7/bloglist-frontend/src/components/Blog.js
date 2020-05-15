@@ -20,13 +20,13 @@ const Blog = ({ blog }) => {
     <>
       <div style={blogStyle} className="blog">
         {blog.title} {blog.author}{" "}
-        <button onClick={dispatch(toggleBlogVisibility(blog.id))}>{buttonText}</button>
+        <button onClick={() => dispatch(toggleBlogVisibility(blog.id))}>{buttonText}</button>
         <div>{visible ? blog.url : null}</div>
         <div>
           {visible ? blog.likes : null}
           {visible ? (
             <button className="likeButton"
-              onClick={dispatch(like(blog))
+              onClick={() => dispatch(like(blog))
               }>
               Like
             </button>
