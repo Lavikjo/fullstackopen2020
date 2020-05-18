@@ -3,6 +3,7 @@ import thunk from "redux-thunk"
 import { composeWithDevTools } from "redux-devtools-extension"
 
 import blogReducer from "./reducers/blogReducer"
+import usersReducer from "./reducers/usersReducer"
 import loginReducer from "./reducers/loginReducer"
 import notificationReducer from "./reducers/notificationReducer"
 import visibilityReducer from "./reducers/visibilityReducer"
@@ -12,7 +13,8 @@ const reducer = combineReducers({
   blogs: blogReducer,
   notification: notificationReducer,
   login: loginReducer,
-  visibility: visibilityReducer })
+  visibility: visibilityReducer,
+  users: usersReducer })
 
 const store = createStore(reducer,
   composeWithDevTools(

@@ -1,18 +1,20 @@
 import React, { useState } from "react"
 import loginService from "../services/login"
+import blogService from "../services/blogs"
 import { setUser } from "../reducers/loginReducer"
 import { setNotification, removeNotification } from "../reducers/notificationReducer"
 import { useDispatch } from "react-redux"
+import { useHistory } from "react-router-dom"
 
 const LoginForm = () => {
   const [password, setPassword] = useState("")
   const [username, setUsername] = useState("")
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const loginHandler = async (event) => {
     event.preventDefault()
     try {
-      console.log(username, password)
       const user = await loginService.login({
         username,
         password,
@@ -22,8 +24,9 @@ const LoginForm = () => {
       setUsername("")
       setPassword("")
       dispatch(setUser(user))
+      blogService.setJWT(user.token)
+      history.push("/")
     } catch (exception) {
-      console.log(exception)
       dispatch(setNotification({
         data: exception.response.data.error,
         type: "error",

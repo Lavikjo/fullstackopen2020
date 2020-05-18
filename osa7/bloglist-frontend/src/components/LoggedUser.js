@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux"
 
 const LoggedUser = ({ user }) => {
   const dispatch = useDispatch()
+  if (user === null) return null
   return (
     <div>
       {user.name} logged in{" "}
