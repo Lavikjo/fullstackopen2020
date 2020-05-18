@@ -1,6 +1,7 @@
 import React from "react"
-import LoggedUser from "./LoggedUser"
+
 import { Route, Redirect } from "react-router-dom"
+import Navigationbar from "./Navigationbar"
 
 const ProtectedRoute = ({ component: Component, loggedUser, loading,  ...rest }) => {
   return (
@@ -11,8 +12,8 @@ const ProtectedRoute = ({ component: Component, loggedUser, loading,  ...rest })
         } else {
           return (
             <>
-              <h1>Blogs</h1>
-              <LoggedUser user={loggedUser}/>
+              <Navigationbar loggedUser={loggedUser} />
+              <h1>Blog app</h1>
               <Component  {...rest} {...props}/>
             </>
           )

@@ -7,7 +7,7 @@ const LoggedUser = ({ user }) => {
   const dispatch = useDispatch()
   if (user === null) return null
   return (
-    <div>
+    <>
       {user.name} logged in{" "}
       <button
         onClick={() => {
@@ -17,7 +17,7 @@ const LoggedUser = ({ user }) => {
         }}>
         logout
       </button>
-    </div>
+    </>
   )
 }
 export default LoggedUser
