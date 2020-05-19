@@ -45,6 +45,28 @@ blogsRouter.post("/", async (request, response) => {
   response.json(returnedBlog.toJSON())
 })
 
+blogsRouter.post("/:id/comments", async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const body = request.body
+  const token = request.token
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" })
+  }
+  const newComments = blog._doc.comments
+  const modifiedBlog = {
+    title: blog._doc.title,
+    url: blog._doc.url,
+    author: blog._doc.author,
+    likes: blog._doc.likes,
+    comments: newComments.concat(body.comments) }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, modifiedBlog, {
+    new: true,
+  })
+  response.json(updatedBlog.toJSON())
+})
+
 blogsRouter.delete("/:id", async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   const token = request.token
