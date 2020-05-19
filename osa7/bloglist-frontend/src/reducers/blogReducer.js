@@ -22,6 +22,16 @@ export const createBlog = (data) => {
   }
 }
 
+export const addComment = (blog, comment) => {
+  return async dispatch => {
+    await blogService.addComment(blog.id, comment)
+    dispatch( {
+      type: "ADD_COMMENT",
+      data: { id: blog.id, comment }
+    })
+  }
+}
+
 export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
@@ -47,6 +57,11 @@ const blogReducer = (state = [], action) => {
   case "LIKE": {
     const blog = state.find(el => el.id === action.data.id)
     const newBlog = { ...blog, likes: blog.likes + 1 }
+    return state.map(el => el.id !== action.data.id ? el : newBlog)
+  }
+  case "ADD_COMMENT": {
+    const blog = state.find(el => el.id === action.data.id)
+    const newBlog = { ...blog, comments: blog.comments.concat(action.data.comment) }
     return state.map(el => el.id !== action.data.id ? el : newBlog)
   }
   case "NEW_BLOG":
