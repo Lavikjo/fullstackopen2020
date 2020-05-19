@@ -6,7 +6,7 @@ import { Flex, Link } from "@chakra-ui/core"
 const Navigationbar = ({ loggedUser }) => {
   return (
     <Flex bg="#bdc3c7" flexDirection="row" alignItems="center">
-      <Link style={{ margin: "0 1rem", fontSize: "24x" }} as={RouterLink} to="/">blogs</Link>
+      <Link style={{ margin: "0 1rem", fontSize: "24px" }} as={RouterLink} to="/">blogs</Link>
       <Link style={{ margin: "0 1rem", fontSize: "24px" }} as={RouterLink} to="/users">users</Link>
       <LoggedUser style={{ marginLeft: "auto" }} user={loggedUser}/>
     </Flex>
