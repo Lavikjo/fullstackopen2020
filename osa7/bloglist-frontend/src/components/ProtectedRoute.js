@@ -2,6 +2,7 @@ import React from "react"
 
 import { Route, Redirect } from "react-router-dom"
 import Navigationbar from "./Navigationbar"
+import { Heading } from "@chakra-ui/core"
 
 const ProtectedRoute = ({ component: Component, loggedUser, loading,  ...rest }) => {
   return (
@@ -13,7 +14,7 @@ const ProtectedRoute = ({ component: Component, loggedUser, loading,  ...rest })
           return (
             <>
               <Navigationbar loggedUser={loggedUser} />
-              <h1>Blog app</h1>
+              <Heading as="h1" size="2xl">Blog app</Heading>
               <Component  {...rest} {...props}/>
             </>
           )

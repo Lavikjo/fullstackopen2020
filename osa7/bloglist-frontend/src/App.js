@@ -14,6 +14,10 @@ import {
 } from "react-router-dom"
 import ProtectedRoute from "./components/ProtectedRoute"
 import MainView from "./components/MainView"
+import { Box } from "@chakra-ui/core"
+
+
+
 
 const App = () => {
   const dispatch = useDispatch()
@@ -40,17 +44,15 @@ const App = () => {
   const blogs = useSelector(state => state.blogs).sort((a, b) => b.likes - a.likes)
   const users = useSelector(state => state.users)
 
-  //const blogMatch = useRouteMatch("/blogs/:id")
-  /*   const blog = blogMatch
-    ? blogs.find(n => Number(n.id) === Number(blogMatch.params.id))
-    : null */
-
-  /*  const userMatch = useRouteMatch("/users/:id")
-  const singleUser = userMatch
-    ? users.find(n => Number(n.id) === Number(userMatch.params.id))
-    : null */
   return (
-    <div>
+    <Box
+      width= {[
+        "100%", // base
+        "90%", // 480px upwards
+        "50%", // 768px upwards
+        "40%", // 992px upwards
+      ]}
+      style={{ margin: "0 auto" }}>
       <Notification notification={notification} />
       <Switch>
         <ProtectedRoute path="/blogs/:id" component={BlogView} loggedUser={user} loading={loading}/>
@@ -66,7 +68,8 @@ const App = () => {
         <ProtectedRoute path="/" component={MainView} blogs={blogs} loggedUser={user} loading={loading}/>
 
       </Switch>
-    </div>
+
+    </Box>
   )
 }
 

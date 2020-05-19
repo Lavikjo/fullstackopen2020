@@ -1,12 +1,13 @@
 import React from "react"
 import Blog from "./Blog"
+import { Stack } from "@chakra-ui/core"
 
 const Blogs = ({ blogs }) => (
-  <div>
+  <Stack styleType="none">
     {blogs.map((blog) => (
       <Blog key={blog.id} blog={blog} />
     ))}
-  </div>
+  </Stack>
 )
 
 export default Blogs

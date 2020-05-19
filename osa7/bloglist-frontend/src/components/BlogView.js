@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { like, addComment } from "../reducers/blogReducer"
+import { Button, Textarea, Heading, Text, List, ListItem, Divider } from "@chakra-ui/core"
 
 
 const BlogView = () => {
@@ -22,24 +23,25 @@ const BlogView = () => {
 
   return (
     <div>
-      <h1>{blog.title}</h1>
-      <div>{blog.url}</div>
-      <div>{blog.likes} likes</div>
-      <button className="likeButton"
+      <Divider/>
+      <Heading as="h2" size="x1">{blog.title}</Heading>
+      <Text>{blog.url}</Text>
+      <Text>{blog.likes} likes</Text>
+      <Button className="likeButton"
         onClick={() => dispatch(like(blog))
         }>
               Like
-      </button>
-      <div>Added by {blog.user.name}</div>
-
-      <h2>Comments</h2>
+      </Button>
+      <Text>Added by {blog.user.name}</Text>
+      <Divider/>
+      <Heading as="h2" size="x1">Comments</Heading>
       <form onSubmit={handleComment}>
-        <input value={comment} onChange={({ target }) => setComment(target.value)}></input>
-        <button type="submit"> Add comment</button>
+        <Textarea value={comment} onChange={({ target }) => setComment(target.value)}></Textarea>
+        <Button type="submit"> Add comment</Button>
       </form>
-      <ul>
-        {blog.comments.map(comment => <li key={comment}>{comment}</li>)}
-      </ul>
+      <List styleType="disc">
+        {blog.comments.map(comment => <ListItem key={comment}>{comment}</ListItem>)}
+      </List>
     </div>
   )
 

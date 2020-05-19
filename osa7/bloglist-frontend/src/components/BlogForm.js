@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux"
 import { createBlog } from "../reducers/blogReducer"
 import { setNotification, removeNotification } from "../reducers/notificationReducer"
 import { toggleVisibility } from "../reducers/visibilityReducer"
+import { Button, Input, FormControl, FormLabel } from "@chakra-ui/core"
 
 const BlogForm = () => {
   const [title, setTitle] = useState("")
@@ -47,34 +48,30 @@ const BlogForm = () => {
   return (
     <div>
       <form onSubmit={handleCreation}>
-        <div>
-          title:
-          <input
+        <FormControl>
+          <FormLabel htmlFor="title">Title</FormLabel>
+          <Input
             type="text"
             value={title}
             id="title"
             name="title"
-            onChange={({ target }) => setTitle(target.value)}></input>
-        </div>
-        <div>
-          author:
-          <input
+            onChange={({ target }) => setTitle(target.value)}></Input>
+          <FormLabel htmlFor="author">Author</FormLabel>
+          <Input
             type="text"
             value={author}
             id="author"
             name="author"
-            onChange={({ target }) => setAuthor(target.value)}></input>
-        </div>
-        <div>
-          url:
-          <input
+            onChange={({ target }) => setAuthor(target.value)}></Input>
+          <FormLabel htmlFor="url">Url</FormLabel>
+          <Input
             type="text"
             value={url}
             id="url"
             name="url"
-            onChange={({ target }) => setUrl(target.value)}></input>
-        </div>
-        <button id="createBlogButton" type="submit">Create</button>
+            onChange={({ target }) => setUrl(target.value)}></Input>
+          <Button id="createBlogButton" type="submit">Create</Button>
+        </FormControl>
       </form>
     </div>
   )
