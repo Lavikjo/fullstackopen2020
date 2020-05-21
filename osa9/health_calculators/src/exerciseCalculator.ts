@@ -30,6 +30,7 @@ const describeRating = (rating: number): Description => {
   } else if (rating >= 2.5) {
     return "excellent"
   }
+  return "bad"
 }
 
 const calculateExercise = (target: number, hours: Array<number>): Result => {
