@@ -4,15 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ts-node": "ts-node -- src/bmiCalculator.ts",
-    "calculateBmi": "ts-node -- src/bmiCalculator.ts"
+    "ts-node": "ts-node",
+    "calculateBmi": "ts-node -- src/bmiCli.ts",
+    "calculateExercises": "ts-node -- src/exerciseCalculator.ts",
+    "dev": "ts-node-dev --no-notify -- src/index.ts"
   },
   "author": "Joel Lavikainen",
   "license": "MIT",
   "devDependencies": {
+    "@types/express": "^4.17.6",
     "@types/node": "^14.0.4",
     "ts-node": "^8.10.1",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
