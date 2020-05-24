@@ -6,11 +6,7 @@ const getEntries = () : Diagnose[] => {
 }; 
 
 
-const addDiagnose = () => {
-  return [];
-}; 
 
 export default {
   getEntries,
-  addDiagnose
 };
