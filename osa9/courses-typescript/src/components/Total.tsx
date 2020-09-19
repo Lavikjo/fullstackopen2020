@@ -1,7 +1,7 @@
 import React from "react"
-import { PartType } from "../types/types"
+import { CoursePart } from "../types/types"
 
-const Total: React.FC<{ parts: PartType[] }> = ({ parts }) => {
+const Total: React.FC<{ parts: CoursePart[] }> = ({ parts }) => {
   const sum: number = parts.reduce((sum, part) => {
     return sum + part.exerciseCount
   }, 0)
