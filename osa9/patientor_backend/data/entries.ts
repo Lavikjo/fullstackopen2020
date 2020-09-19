@@ -51,7 +51,6 @@ export const patients: Patient [] = patientData.map(obj => {
   return object;
 });
 
-console.log(patients);
 
 export const diagnoses: Array<Diagnose> = [
   {
