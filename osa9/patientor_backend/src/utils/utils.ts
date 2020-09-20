@@ -22,8 +22,30 @@ const isEntry = (entry: any): entry is Entry[] => {
   return typeof entry === 'object' || entry instanceof Array;
 };
 
+export const isValidEntryType = (entry: string): entry is string => {
+  if (typeof entry === 'string' && (entry === 'HealthCheck' 
+  || entry === 'OccupationalHealthcare' || entry === 'Hospital')) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const requiredEntryFields = (entry: Entry): boolean => {
+  switch(entry.type) {
+    case "Hospital":
+      return 'discharge' in entry && 'date' in entry.discharge && 'criteria' in entry.discharge;
+    case "OccupationalHealthcare":
+      return 'sickLeave' in entry && 'startDate' in entry.sickLeave && 'endDate' in entry.sickLeave;
+    case "HealthCheck":
+      return 'healthCheckRating' in entry;
+  }
+};
+
 const parseEntries = (entry: any): Entry[] => {
   if (!entry || !isEntry(entry)){
+    throw new Error("Incorrect Entry" + entry);
+  } else if (entry.length === 0) {
     return [];
   }
 

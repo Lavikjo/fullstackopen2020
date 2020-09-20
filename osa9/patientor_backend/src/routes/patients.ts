@@ -19,6 +19,17 @@ patientsRouter.get("/:id", (req, res) => {
   }
 });
 
+patientsRouter.post("/:id", (req, res) => {
+  
+  try {
+    const updatedPatient = patientService.addEntry(req.params.id, req.body);
+    res.json(updatedPatient);
+  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    res.status(400).send(e.message);
+  }
+});
+
 patientsRouter.post("/", (req, res) => {
   try {
     const newPatientEntry  = toNewPatient(req.body);

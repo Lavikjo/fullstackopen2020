@@ -1,6 +1,7 @@
 import { patients } from '../../data/entries';
-import { Patient, NonSensitivePatient, NewPatientEntry } from '../types/patient';
+import { Patient, NonSensitivePatient, NewPatientEntry, Entry } from '../types/patient';
 import { v4 as uuidv4} from 'uuid';
+import { isValidEntryType, requiredEntryFields } from '../utils/utils';
 
 const getEntries = () : Patient[] => {
   return patients;
@@ -27,9 +28,31 @@ const findById = (id: string): Patient | undefined => {
   return entry;
 };
 
+const addEntry = (id:string, newEntry: Entry): Entry=> {
+  const patient = patients.find(p => p.id === id);
+  let updatedPatient = newEntry;
+
+  if (typeof newEntry.date === 'string' && typeof newEntry.description === 'string'
+   && typeof newEntry.specialist === 'string' && typeof newEntry.type === 'string'
+   && isValidEntryType(newEntry.type)) {
+     if(!requiredEntryFields(newEntry)) {
+       throw new Error("Missing required fields for entry");
+     }
+    updatedPatient = { 
+      ...newEntry,
+      id: uuidv4()};
+    patient?.entries.push(updatedPatient);
+  } else {
+    throw Error("Invalid data!");
+  }
+
+  return updatedPatient;
+};
+
 export default {
   getEntries,
   getNonSensitiveEntries,
   addPatient,
-  findById
+  findById,
+  addEntry
 };
