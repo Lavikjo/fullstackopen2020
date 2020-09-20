@@ -6,6 +6,7 @@ import { Gender, Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
 import { addPatient } from "../state/reducer";
+import EntryComponent from "../components/EntryComponent";
 
 const genderIcon: Record<Gender, SemanticICONS> = {
   [Gender.Male]: 'mars',
@@ -43,6 +44,8 @@ const PatientInfoPage: React.FC<{ id: string }> = ({ id }) => {
       <p>ssn: {patient.ssn}</p>
       <p>birthday: {patient.dateOfBirth}</p>
       <p>occupation: {patient.occupation}</p>
+      <Header size='small'>entries</Header>
+      {Object.values(patient.entries).map((entry) => <EntryComponent entry={entry} key={entry.id} />)}
     </div>
   );
 };
