@@ -1,5 +1,5 @@
 import toNewPatientEntry from "../src/utils/utils";
-import { Diagnose } from "../src/types/diagnose";
+import { Diagnosis } from "../src/types/diagnose";
 
 import { Patient, Gender } from '../src/types/patient';
 
@@ -124,7 +124,7 @@ export const patients: Patient [] = patientData.map(obj => {
 });
 
 
-export const diagnoses: Array<Diagnose> = [
+export const diagnoses: Array<Diagnosis> = [
   {
     "code": "M24.2",
     "name": "Disorder of ligament",
