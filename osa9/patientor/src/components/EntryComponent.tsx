@@ -1,21 +1,29 @@
 import React from "react";
-import { useStateValue } from "../state";
 import { Entry } from "../types";
+import HealthCheck from "./HealthCheck";
+import HospitalEntryComponent from "./HospitalEntryComponent";
+import OccupationalHealthCare from "./OccupationalHealthCare";
 
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
 
 const EntryComponent: React.FC<{ entry: Entry }> = ({ entry }) => {
-  const [{ diagnoses },] = useStateValue();
   if (entry === undefined) return null;
-  return (
-    <>
-      <p>{entry.date} {entry.description}</p>
-      <ul>
-        {entry.diagnosisCodes?.map((code) => (
-          <li key={code}>{code} {diagnoses[code]?.name}</li>
-        ))}
-      </ul>
-    </>
-  );
+
+  switch (entry.type) {
+
+    case "Hospital":
+      return <HospitalEntryComponent entry={entry}></HospitalEntryComponent>;
+    case "HealthCheck":
+      return <HealthCheck entry={entry}></HealthCheck>;
+    case "OccupationalHealthcare":
+      return <OccupationalHealthCare entry={entry}></OccupationalHealthCare>;
+    default:
+      return assertNever(entry);
+  }
 };
 
 export default EntryComponent;

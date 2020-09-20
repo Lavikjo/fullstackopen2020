@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import { Header, Icon, Loader, SemanticICONS } from "semantic-ui-react";
+import { Header, Icon, Card, Loader, SemanticICONS } from "semantic-ui-react";
 
 import { Gender, Patient } from "../types";
 import { apiBaseUrl } from "../constants";
@@ -45,7 +45,9 @@ const PatientInfoPage: React.FC<{ id: string }> = ({ id }) => {
       <p>birthday: {patient.dateOfBirth}</p>
       <p>occupation: {patient.occupation}</p>
       <Header size='small'>entries</Header>
-      {Object.values(patient.entries).map((entry) => <EntryComponent entry={entry} key={entry.id} />)}
+      <Card.Group>
+        {Object.values(patient.entries).map((entry) => <EntryComponent entry={entry} key={entry.id} />)}
+      </Card.Group>
     </div>
   );
 };
