@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectField, GenderOption } from "./FormField";
+import { TextField, SelectGenderField, GenderOption } from "./FormField";
 import { Gender, Patient } from "../types";
 
 /*
@@ -78,7 +78,7 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               name="occupation"
               component={TextField}
             />
-            <SelectField
+            <SelectGenderField
               label="Gender"
               name="gender"
               options={genderOptions}

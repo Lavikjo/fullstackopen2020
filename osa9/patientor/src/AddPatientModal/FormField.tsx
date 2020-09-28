@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
-import { Diagnosis, Gender } from "../types";
+import { Diagnosis, Gender, EntryType } from "../types";
 
 // structure of a single option
 export type GenderOption = {
@@ -9,29 +9,36 @@ export type GenderOption = {
   label: string;
 };
 
-// props for select field component
-type SelectFieldProps = {
-  name: string;
+export type EntryOption = {
+  value: EntryType;
   label: string;
-  options: GenderOption[];
 };
 
-export const SelectField: React.FC<SelectFieldProps> = ({
+// props for select field component
+export interface BaseFieldProps {
+  name: string;
+  label: string;
+}
+interface SelectGenderFieldProps extends BaseFieldProps {
+  options: GenderOption[];
+}
+
+export const SelectGenderField: React.FC<SelectGenderFieldProps> = ({
   name,
   label,
-  options
-}: SelectFieldProps) => (
-  <Form.Field>
-    <label>{label}</label>
-    <Field as="select" name={name} className="ui dropdown">
-      {options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label || option.value}
-        </option>
-      ))}
-    </Field>
-  </Form.Field>
-);
+  options,
+}: SelectGenderFieldProps) => (
+    <Form.Field>
+      <label>{label}</label>
+      <Field as="select" name={name} className="ui dropdown">
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label || option.value}
+          </option>
+        ))}
+      </Field>
+    </Form.Field>
+  );
 
 interface TextProps extends FieldProps {
   label: string;
@@ -41,16 +48,16 @@ interface TextProps extends FieldProps {
 export const TextField: React.FC<TextProps> = ({
   field,
   label,
-  placeholder
+  placeholder,
 }) => (
-  <Form.Field>
-    <label>{label}</label>
-    <Field placeholder={placeholder} {...field} />
-    <div style={{ color:'red' }}>
-      <ErrorMessage name={field.name} />
-    </div>
-  </Form.Field>
-);
+    <Form.Field>
+      <label>{label}</label>
+      <Field placeholder={placeholder} {...field} />
+      <div style={{ color: "red" }}>
+        <ErrorMessage name={field.name} />
+      </div>
+    </Form.Field>
+  );
 
 /*
   for exercises 9.24.-
@@ -62,26 +69,33 @@ interface NumberProps extends FieldProps {
   max: number;
 }
 
-export const NumberField: React.FC<NumberProps> = ({ field, label, min, max }) => (
-  <Form.Field>
-    <label>{label}</label>
-    <Field {...field} type='number' min={min} max={max} />
+export const NumberField: React.FC<NumberProps> = ({
+  field,
+  label,
+  min,
+  max,
+}) => (
+    <Form.Field>
+      <label>{label}</label>
+      <Field {...field} type="number" min={min} max={max} />
 
-    <div style={{ color:'red' }}>
-      <ErrorMessage name={field.name} />
-    </div>
-  </Form.Field>
-);
+      <div style={{ color: "red" }}>
+        <ErrorMessage name={field.name} />
+      </div>
+    </Form.Field>
+  );
+
+export interface DiagnosisSelectionProps {
+  diagnoses: Diagnosis[];
+  setFieldValue: FormikProps<{ diagnosisCodes: string[] }>["setFieldValue"];
+  setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>["setFieldTouched"];
+}
 
 export const DiagnosisSelection = ({
   diagnoses,
   setFieldValue,
-  setFieldTouched
-}: {
-  diagnoses: Diagnosis[];
-  setFieldValue: FormikProps<{ diagnosisCodes: string[] }>["setFieldValue"];
-  setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>["setFieldTouched"];
-}) => {
+  setFieldTouched,
+}: DiagnosisSelectionProps) => {
   const field = "diagnosisCodes";
   const onChange = (
     _event: React.SyntheticEvent<HTMLElement, Event>,
@@ -91,10 +105,10 @@ export const DiagnosisSelection = ({
     setFieldValue(field, data.value);
   };
 
-  const stateOptions = diagnoses.map(diagnosis => ({
+  const stateOptions = diagnoses.map((diagnosis) => ({
     key: diagnosis.code,
     text: `${diagnosis.name} (${diagnosis.code})`,
-    value: diagnosis.code
+    value: diagnosis.code,
   }));
 
   return (
@@ -108,7 +122,9 @@ export const DiagnosisSelection = ({
         options={stateOptions}
         onChange={onChange}
       />
-      <ErrorMessage name={field} />
+      <div style={{ color: "red" }}>
+        <ErrorMessage name={field} />
+      </div>
     </Form.Field>
   );
 };

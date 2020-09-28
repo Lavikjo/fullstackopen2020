@@ -1,5 +1,5 @@
 import { State } from "./state";
-import { Diagnosis, Patient } from "../types";
+import { Diagnosis, Patient, Entry } from "../types";
 
 export type Action =
   | {
@@ -10,86 +10,108 @@ export type Action =
       type: "ADD_PATIENT";
       payload: Patient;
     }
-  |  {
+  | {
       type: "ADD_DIAGNOSIS";
       payload: Diagnosis;
     }
-    
-  |  {
-    type: "SET_DIAGNOSES";
-    payload: Diagnosis[];
-  };
+  | {
+      type: "SET_DIAGNOSES";
+      payload: Diagnosis[];
+    }
+  | {
+      type: "ADD_ENTRY";
+      payload: { entry: Entry;patientId:  string };
+    };
 
-export const addPatient = (patient: Patient): Action =>  {
+export const addPatient = (patient: Patient): Action => {
   return {
     type: "ADD_PATIENT",
-    payload: patient 
+    payload: patient,
   };
 };
 
-export const addDiagnosis = (diagnosis: Diagnosis): Action =>  {
+export const addEntry = (entry: Entry, patientId: string): Action => {
+  return {
+    type: "ADD_ENTRY",
+    payload: {
+      entry,
+      patientId,
+    },
+  };
+};
+
+export const addDiagnosis = (diagnosis: Diagnosis): Action => {
   return {
     type: "ADD_DIAGNOSIS",
-    payload: diagnosis 
+    payload: diagnosis,
   };
 };
 
-export const setDiagnoses = (diagnoseList: Diagnosis[]): Action =>  {
+export const setDiagnoses = (diagnoseList: Diagnosis[]): Action => {
   return {
     type: "SET_DIAGNOSES",
-    payload: diagnoseList 
+    payload: diagnoseList,
   };
 };
 
-export const setPatientList = (patientList: Patient[]): Action =>  {
+export const setPatientList = (patientList: Patient[]): Action => {
   return {
     type: "SET_PATIENT_LIST",
-    payload: patientList 
+    payload: patientList,
   };
 };
 
-export const reducer = (state: State, action: Action): State => {
+const patients = (state: { [id: string]: Patient }, action: Action) => {
   switch (action.type) {
     case "SET_PATIENT_LIST":
       return {
         ...state,
-        patients: {
-          ...action.payload.reduce(
-            (memo, patient) => ({ ...memo, [patient.id]: patient }),
-            {}
-          ),
-          ...state.patients
-        }
+        ...action.payload.reduce(
+          (memo, patient) => ({ ...memo, [patient.id]: patient }),
+          {}
+        ),
       };
     case "ADD_PATIENT":
       return {
         ...state,
-        patients: {
-          ...state.patients,
-          [action.payload.id]: action.payload
-        }
+        [action.payload.id]: action.payload,
       };
-    case "ADD_DIAGNOSIS":
-    return {
-      ...state,
-      diagnoses: {
-        ...state.diagnoses,
-        [action.payload.code]: action.payload
-      }
-    };
 
-    case "SET_DIAGNOSES":
-    return {
+    case "ADD_ENTRY":
+      return {
         ...state,
-        diagnoses: {
-          ...action.payload.reduce(
-            (memo, diagnosis) => ({ ...memo, [diagnosis.code]: diagnosis }),
-            {}
-          ),
-          ...state.diagnoses
-        }
+        [action.payload.patientId]: {
+          ...state[action.payload.patientId],
+          entries: [...state[action.payload.patientId].entries, action.payload.entry],
+        },
       };
     default:
       return state;
   }
 };
+
+const diagnoses = (state: { [code: string]: Diagnosis }, action: Action) => {
+  switch (action.type) {
+    case "ADD_DIAGNOSIS":
+      return {
+        ...state,
+        [action.payload.code]: action.payload,
+      };
+
+    case "SET_DIAGNOSES":
+      return {
+        ...state,
+        ...action.payload.reduce(
+          (memo, diagnosis) => ({ ...memo, [diagnosis.code]: diagnosis }),
+          {}
+        ),
+      };
+    default:
+      return state;
+  }
+};
+
+export const reducer = (state: State, action: Action) => ({
+  diagnoses: diagnoses(state.diagnoses, action),
+  patients: patients(state.patients, action),
+});

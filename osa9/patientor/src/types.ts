@@ -12,7 +12,7 @@ export enum Gender {
   Other = "other"
 }
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -54,6 +54,7 @@ export interface HospitalEntry extends BaseEntry {
 }
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+export type EntryType = Entry['type'];
 
 
 export interface Patient {
@@ -63,7 +64,7 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
-  entries: Entry;
+  entries: Entry[];
 }
 
 interface MatchParams {
