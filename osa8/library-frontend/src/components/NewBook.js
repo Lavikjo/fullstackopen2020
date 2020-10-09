@@ -4,12 +4,12 @@ import { ADD_BOOK } from "../queries"
 
 const NewBook = (props) => {
   const [title, setTitle] = useState("")
-  const [author, setAuhtor] = useState("")
+  const [author, setAuthor] = useState("")
   const [published, setPublished] = useState("")
   const [genre, setGenre] = useState("")
   const [genres, setGenres] = useState([])
 
-  const [createBook] = useMutation(ADD_BOOK)
+  const [createBook] = useMutation(ADD_BOOK, { onError: props.onError })
 
   if (!props.show) {
     return null
@@ -19,10 +19,9 @@ const NewBook = (props) => {
     event.preventDefault()
     const publishInt = Number(published)
     createBook({ variables: { title, author, published: publishInt, genres } })
-
     setTitle("")
     setPublished("")
-    setAuhtor("")
+    setAuthor("")
     setGenres([])
     setGenre("")
   }
@@ -46,7 +45,7 @@ const NewBook = (props) => {
           author
           <input
             value={author}
-            onChange={({ target }) => setAuhtor(target.value)}
+            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>

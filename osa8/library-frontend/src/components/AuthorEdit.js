@@ -7,7 +7,7 @@ const AuthorEdit = (props) => {
   const result = useQuery(ALL_AUTHORS, { pollInterval: 2000 })
   const [authors, setAuthors] = useState([])
   const [selection, setSelection] = useState()
-  const [year, setYear] = useState("")
+  const [year, setYear] = useState("0")
 
   useEffect(() => {
     if (result.data) {
@@ -21,7 +21,7 @@ const AuthorEdit = (props) => {
     const yearInt = Number(year)
     editAuthor({ variables: { name: selection, setBornTo: yearInt } })
 
-    setYear("")
+    setYear("0")
   }
 
   if (!props.show) {
