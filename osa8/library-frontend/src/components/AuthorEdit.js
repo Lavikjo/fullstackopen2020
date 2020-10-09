@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
 
 const AuthorEdit = (props) => {
-  const [editAuthor] = useMutation(EDIT_AUTHOR)
+  const [editAuthor] = useMutation(EDIT_AUTHOR, { onError: props.onError })
   const result = useQuery(ALL_AUTHORS, { pollInterval: 2000 })
   const [authors, setAuthors] = useState([])
   const [selection, setSelection] = useState()
