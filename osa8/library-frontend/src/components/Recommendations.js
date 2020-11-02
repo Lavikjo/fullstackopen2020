@@ -1,38 +1,41 @@
 import React, { useState, useEffect } from "react"
-import { useQuery, useLazyQuery } from "@apollo/client"
+import { useLazyQuery } from "@apollo/client"
 import { FAVORITE_GENRE, ALL_BOOKS } from "../queries"
 
 const Recommendations = (props) => {
-  const genre_result = useQuery(FAVORITE_GENRE, {pollInterval: 5000})
-  
-
   const [favoriteGenre, setFavoriteGenre] = useState(null)
   const [books, setBooks] = useState([])
 
-  const [getBooks, data] = useLazyQuery(ALL_BOOKS)
+  const [getFavorite] = useLazyQuery(FAVORITE_GENRE, {
+    onCompleted: (data) => {
+      if (data.me !== null) {
+        let favorite = data.me.favoriteGenre
 
+        setFavoriteGenre(favorite)
+        getBooks({ variables: { genre: favorite } })
+      }
+    },
+  })
 
+  const [getBooks] = useLazyQuery(ALL_BOOKS, {
+    onCompleted: (data) => {
+      setBooks(data.allBooks)
+    },
+  })
 
   useEffect(() => {
-    if (genre_result.data) {
-        setFavoriteGenre(genre_result.data.me.favoriteGenre)
-       
-      }
-    if (data.data) {
-        setBooks(data.data.allBooks)
-    }
-    
-
-  }, [data, books, genre_result])
+    getFavorite()
+  }, [getFavorite, props.show])
 
   if (!props.show) {
     return null
-  } else {
-    getBooks({ variables: {genre: favoriteGenre}})
+  }
   return (
     <div>
       <h2>Recommendations</h2>
-      <div>Book in your favourite genre {favoriteGenre}</div>
+      <div>
+        Book in your favourite genre <b>{favoriteGenre}</b>
+      </div>
       <table>
         <tbody>
           <tr>
@@ -53,7 +56,6 @@ const Recommendations = (props) => {
       </table>
     </div>
   )
-          }
 }
 
 export default Recommendations

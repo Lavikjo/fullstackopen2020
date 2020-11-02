@@ -12,7 +12,8 @@ const AuthorEdit = (props) => {
   useEffect(() => {
     if (result.data) {
       setAuthors(result.data.allAuthors)
-      setSelection(result.data.allAuthors[0].name)
+      if (result.data.allAuthors.length > 0)
+        setSelection(result.data.allAuthors[0].name)
     }
   }, [result])
 
