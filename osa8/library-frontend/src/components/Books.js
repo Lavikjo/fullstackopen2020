@@ -31,13 +31,14 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-
+      <div>Currently filtering by genres: {filter.map((f) => <b key={f}> {f}</b>)}</div>
       <table>
         <tbody>
           <tr>
             <th></th>
             <th>author</th>
             <th>published</th>
+            <th>genres</th>
           </tr>
           {filteredBooks.map((a) => (
             <tr key={a.title}>
