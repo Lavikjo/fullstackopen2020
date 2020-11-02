@@ -68,15 +68,12 @@ const resolvers = {
         return books
       }
       const author = await Author.find({ name: args.author })
-      console.log(args.genre)
       if (author.length !== 0) {
         return await Book.find({ genres: args.genre, author: author }).populate(
           "author"
         )
       } else {
-
         return await Book.find({ genres: args.genre }).populate("author")
-       
       }
     },
     me: (root, args, context) => {
@@ -104,6 +101,7 @@ const resolvers = {
           await newAuthor.save()
           const book = new Book({ ...args, author: newAuthor })
           await book.save()
+          return book.populate("author")
         }
       } catch (error) {
         throw new UserInputError(error.message, {
