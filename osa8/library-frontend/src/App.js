@@ -4,7 +4,7 @@ import Authors from "./components/Authors"
 import Books from "./components/Books"
 import NewBook from "./components/NewBook"
 import Notification from "./components/Notification"
-import Login from "./components/Login"
+import LoginForm from "./components/Login"
 import { useApolloClient } from "@apollo/client"
 
 const App = () => {
@@ -51,7 +51,7 @@ const App = () => {
 
       <AuthorEdit show={page === "edit"} onError={(e) => onError(e)} />
 
-      <Login
+      <LoginForm
         show={page === "login"}
         setToken={setToken}
         onError={(e) => onError(e)}
