@@ -3,13 +3,16 @@ const {
   gql,
   UserInputError,
   AuthenticationError,
+  PubSub,
 } = require("apollo-server")
+const DataLoader = require("dataloader")
 const mongoose = require("mongoose")
 const Book = require("./models/book")
 const Author = require("./models/author")
 const User = require("./models/user")
 const config = require("./utils/config")
 const jwt = require("jsonwebtoken")
+const pubsub = new PubSub()
 
 const typeDefs = gql`
   type Author {
@@ -56,6 +59,10 @@ const typeDefs = gql`
     allAuthors: [Author!]!
     me: User
   }
+
+  type Subscription {
+    bookAdded: Book!
+  }
 `
 
 const resolvers = {
@@ -85,8 +92,8 @@ const resolvers = {
     },
   },
   Author: {
-    bookCount: (root, args) => {
-      return Book.countDocuments({ author: root._id })
+    bookCount: async (root, args, { loaders }) => {
+      return loaders.bookCount.load(root._id)
     },
   },
 
@@ -101,6 +108,7 @@ const resolvers = {
           await newAuthor.save()
           const book = new Book({ ...args, author: newAuthor })
           await book.save()
+          pubsub.publish("BOOK_ADDED", { bookAdded: book })
           return book.populate("author")
         }
       } catch (error) {
@@ -111,7 +119,7 @@ const resolvers = {
 
       const book = new Book({ ...args, author: author })
       await book.save()
-
+      pubsub.publish("BOOK_ADDED", { bookAdded: book })
       return book.populate("author")
     },
     editAuthor: async (root, args, { currentUser }) => {
@@ -153,17 +161,55 @@ const resolvers = {
       return { value: jwt.sign(userForToken, config.JWT_SECRET) }
     },
   },
+  Subscription: {
+    bookAdded: { subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"]) },
+  },
 }
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
+    const loaders = {
+      loaders: {
+        bookCount: new DataLoader(async (authorIds) => {
+          const bookCounts = await Book.aggregate([
+            {
+              $match: {
+                author: {
+                  $in: authorIds,
+                },
+              },
+            },
+            {
+              $group: {
+                _id: "$author",
+                bookCount: { $sum: 1 },
+              },
+            },
+          ])
+
+          const idToCount = {}
+          for (const count of bookCounts) {
+            idToCount[count._id.toString()] = count.bookCount
+          }
+
+          return authorIds.map((authorId) => idToCount[authorId.toString()])
+        }),
+      },
+    }
+
     const auth = req ? req.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith("bearer ")) {
       const decodedToken = jwt.verify(auth.substring(7), config.JWT_SECRET)
       const currentUser = await User.findById(decodedToken.id)
-      return { currentUser }
+      return {
+        currentUser,
+        ...loaders,
+      }
+    }
+    return {
+      ...loaders,
     }
   },
 })
@@ -184,6 +230,7 @@ mongoose
     console.log("error connection to MongoDB:", error.message)
   })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`)
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
