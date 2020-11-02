@@ -20,7 +20,7 @@ const Books = (props) => {
     if(filter.length === 0) {
       setFilteredBooks(books)
     } else {
-      setFilteredBooks( books.filter((b) => filter.some((g) => b.genres.includes(g))))
+      setFilteredBooks( books.filter((b) => filter.every((g) => b.genres.includes(g))))
     }
   }, [result, genres, books, filter])
 
